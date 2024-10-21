@@ -1,4 +1,3 @@
-import { FastifyRequest, FastifyReply } from "fastify";
 import {
   fetchChampionshipData,
   fetchChampionshipMatches,
@@ -8,21 +7,20 @@ import {
   findExistingChampionship,
   upsertMatchData,
 } from "../database/prisma/prisma-championship-service-repository";
+import { FastifyReply } from "fastify";
 
-export async function saveChampionshipMatches(
-  request: FastifyRequest,
-  reply: FastifyReply,
-) {
+export async function saveChampionshipMatches(reply: FastifyReply) {
   try {
     const responseChampionship = await fetchChampionshipData();
 
-    const campeonatoExistente = await findExistingChampionship(
+    const existingChampionship = await findExistingChampionship(
       responseChampionship.edicao_atual.temporada,
     );
 
-    if (campeonatoExistente) {
+    if (existingChampionship) {
       return reply.status(409).send({
-        message:
+        error_code: "SEASON_EXISTS",
+        message_error:
           "A temporada já existe. Aguarde o início de uma nova temporada para realizar esta operação.",
       });
     }
@@ -32,22 +30,23 @@ export async function saveChampionshipMatches(
     const dataMatches = await fetchChampionshipMatches();
 
     if (!dataMatches.partidas || !dataMatches.partidas["fase-unica"]) {
-      return reply
-        .status(500)
-        .send({ message: "Estrutura de dados inesperada da API" });
+      return reply.status(500).send({
+        error_code: "INVALID_DATA_STRUCTURE",
+        message_error: "Estrutura de dados inesperada da API.",
+      });
     }
 
     const matches = dataMatches.partidas["fase-unica"];
 
     await upsertMatchData(matches, championship.id);
 
-    return reply
-      .status(201)
-      .send({ message: "Dados do campeonato salvos com sucesso!" });
+    return reply.status(201).send({
+      message_error: "Dados do campeonato salvos com sucesso!",
+    });
   } catch (err) {
-    console.error("Erro ao salvar dados do campeonato:", err);
-    return reply
-      .status(500)
-      .send({ message: "Erro ao salvar dados do campeonato." });
+    return reply.status(500).send({
+      error_code: "SAVE_ERROR",
+      message_error: "Erro ao salvar dados do campeonato.",
+    });
   }
 }
