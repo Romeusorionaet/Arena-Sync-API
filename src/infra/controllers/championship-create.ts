@@ -9,7 +9,7 @@ import {
   upsertMatchData,
 } from "../database/prisma/prisma-championship-service-repository";
 
-export async function accessChampionshipMatches(
+export async function saveChampionshipMatches(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {

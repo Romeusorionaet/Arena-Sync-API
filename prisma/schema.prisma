@@ -7,6 +7,34 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum CoresDoCartao {
+  VERMELHO
+  AMARELO
+}
+
+model Atleta {
+  id          String @id @default(uuid())
+  nome        String
+  nomePopular String @map("nome_popular")
+  posicao     String
+
+  cartao Cartao[]
+  gol    Gol[]
+
+  @@map("atletas")
+}
+
+model Time {
+  id     String @id @default(uuid())
+  nome   String
+  slug   String
+  escudo String
+
+  estatisticaDaPartida EstatisticaDaPartida[]
+
+  @@map("times")
+}
+
 model Campeonato {
   id          String @id @default(uuid())
   nome        String
@@ -34,16 +62,130 @@ model Partida {
   estadio           String?
 
   campeonatoId String     @map("campeonato_id")
-  campeonato   Campeonato @relation(fields: [campeonatoId], references: [id])
+  campeonato   Campeonato @relation(fields: [campeonatoId], references: [id], onDelete: Cascade)
+
+  estatisticaDaPartida EstatisticaDaPartida[]
+  escalacao            Escalacao[]
 
   @@map("partidas")
 }
 
-model Time {
-  id     String @id @default(uuid())
-  nome   String
-  slug   String
-  escudo String
+model EstatisticaDaPartida {
+  id           String @id @default(uuid())
+  posseDeBola  String @map("posse_de_bola")
+  escanteios   Int
+  impedimentos Int
+  faltas       Int
+  defesas      Int
+  desarmes     Int
 
-  @@map("times")
+  partidaId String  @unique @map("partida_id")
+  partida   Partida @relation(fields: [partidaId], references: [id], onDelete: Cascade)
+  timeId    String  @map("time_id")
+  time      Time    @relation(fields: [timeId], references: [id], onDelete: Cascade)
+
+  cartao       Cartao[]
+  gol          Gol[]
+  passe        Passe[]
+  finalizacao  Finalizacao[]
+  substituicao Substituicao[]
+
+  @@map("estatistica_das_partidas")
+}
+
+model Cartao {
+  id      String         @id @default(uuid())
+  cor     CoresDoCartao?
+  minuto  String
+  periodo String
+
+  estatisticaDaPartidaId String               @map("estatistica_da_partida")
+  estatisticaDaPartida   EstatisticaDaPartida @relation(fields: [estatisticaDaPartidaId], references: [id], onDelete: Cascade)
+  atletaId               String               @map("atleta_id")
+  atleta                 Atleta               @relation(fields: [atletaId], references: [id], onDelete: Cascade)
+
+  @@map("cartoes")
+}
+
+model Gol {
+  id         String  @id @default(uuid())
+  minuto     String
+  periodo    String
+  penalti    Boolean
+  gol_contra Boolean
+
+  estatisticaDaPartidaId String               @map("estatistica_da_partida")
+  estatisticaDaPartida   EstatisticaDaPartida @relation(fields: [estatisticaDaPartidaId], references: [id], onDelete: Cascade)
+  atletaId               String               @map("atleta_id")
+  atleta                 Atleta               @relation(fields: [atletaId], references: [id], onDelete: Cascade)
+
+  @@map("gols")
+}
+
+model Passe {
+  id        String @id @default(uuid())
+  total     Int
+  completos Int
+  errados   Int
+  precisao  String
+
+  estatisticaDaPartidaId String               @map("estatistica_da_partida")
+  estatisticaDaPartida   EstatisticaDaPartida @relation(fields: [estatisticaDaPartidaId], references: [id], onDelete: Cascade)
+
+  @@map("passes")
+}
+
+model Finalizacao {
+  id       String @id @default(uuid())
+  total    Int
+  noGol    Int    @map("no_gol")
+  praFora  Int    @map("pra_fora")
+  naTrave  Int    @map("na_trave")
+  bloqueio Int
+  precisao String
+
+  estatisticaDaPartidaId String               @map("estatistica_da_partida")
+  estatisticaDaPartida   EstatisticaDaPartida @relation(fields: [estatisticaDaPartidaId], references: [id], onDelete: Cascade)
+
+  @@map("finalizacoes")
+}
+
+model Escalacao {
+  id            String @id @default(uuid())
+  timeId        String @map("time_id")
+  tecnico       String
+  esquemaTatico String @map("esquema_tatico")
+
+  partidaId String  @unique @map("partida_id")
+  partida   Partida @relation(fields: [partidaId], references: [id], onDelete: Cascade)
+
+  titular Titular[]
+
+  @@map("escalacoes")
+}
+
+model Titular {
+  id       String @id @default(uuid())
+  atletaId String @map("atleta_id")
+  posicao  String
+  camisa   String
+
+  escalacaoId String
+  escalacao   Escalacao @relation(fields: [escalacaoId], references: [id], onDelete: Cascade)
+
+  @@map("titulares")
+}
+
+model Substituicao {
+  id      String @id @default(uuid())
+  timeId  String @map("time_id")
+  entrou  String
+  saiu    String
+  periodo String
+  minuto  String
+
+  estatisticaDaPartidaId String
+  estatisticaDaPartida   EstatisticaDaPartida @relation(fields: [estatisticaDaPartidaId], references: [id], onDelete: Cascade)
+
+  @@map("substituicoes")
 }
