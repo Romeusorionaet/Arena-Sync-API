@@ -1,0 +1,49 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Campeonato {
+  id          String @id @default(uuid())
+  nome        String
+  slug        String
+  temporada   String @unique
+  status      String
+  logo        String
+  rodadaAtual Int    @map("rodada_atual")
+
+  partida Partida[]
+
+  @@map("Campeonatos")
+}
+
+model Partida {
+  id                String  @id @default(uuid())
+  placar            String?
+  status            String
+  slug              String
+  dataRealizacaoIso String  @map("data_realizacao_iso")
+  timeMandanteId    String  @map("time_mandante_id")
+  timeVisitanteId   String  @map("time_visitante_id")
+  placarMandante    Int?    @map("placar_mandante_id")
+  placarVisitante   Int?    @map("placar_visitante_id")
+  estadio           String?
+
+  campeonatoId String     @map("campeonato_id")
+  campeonato   Campeonato @relation(fields: [campeonatoId], references: [id])
+
+  @@map("partidas")
+}
+
+model Time {
+  id     String @id @default(uuid())
+  nome   String
+  slug   String
+  escudo String
+
+  @@map("times")
+}

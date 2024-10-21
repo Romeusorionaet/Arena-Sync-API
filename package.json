@@ -1,0 +1,36 @@
+{
+  "name": "arenasync",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "tsx watch src/infra/server.ts",
+    "build": "tsup src",
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@rocketseat/eslint-config": "^2.1.0",
+    "@types/config": "^3.3.5",
+    "@types/node": "^22.7.7",
+    "@types/node-cron": "3.0.11",
+    "eslint": "^8.56.0",
+    "prisma": "^5.21.1",
+    "tsx": "^4.19.1",
+    "typescript": "^5.6.3"
+  },
+  "dependencies": {
+    "@fastify/cors": "^10.0.1",
+    "@prisma/client": "^5.21.1",
+    "arenasync": "file:",
+    "axios": "1.7.7",
+    "dotenv": "16.4.5",
+    "fastify": "^5.0.0",
+    "node-cron": "3.0.3",
+    "tsup": "^8.3.0",
+    "zod": "^3.23.8"
+  }
+}
