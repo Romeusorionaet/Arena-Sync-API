@@ -32,7 +32,10 @@ interface SaveTeamDataProps {
   matchData: MatchData;
 }
 
-export async function saveTeamData({ type, matchData }: SaveTeamDataProps) {
+export async function saveTeamData({
+  type,
+  matchData,
+}: SaveTeamDataProps): Promise<void> {
   const parsedMatchData = matchDataSchema.parse(matchData);
   const time = parsedMatchData[`time_${type}`];
   const escalacao = parsedMatchData.escalacoes[type];

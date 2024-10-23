@@ -7,7 +7,7 @@ import {
 } from "../database/prisma/prisma-matche-repository";
 import { matchDataSchema } from "../schemas/match-data-schema";
 
-export async function cronJobGetMatch() {
+export async function cronJobUpdateMatches() {
   try {
     const matchIdList = await findByNearestDateAndTime();
 
@@ -34,4 +34,4 @@ export async function cronJobGetMatch() {
   }
 }
 
-cron.schedule("0 1 * * *", cronJobGetMatch);
+cron.schedule("0 1 * * *", cronJobUpdateMatches);
