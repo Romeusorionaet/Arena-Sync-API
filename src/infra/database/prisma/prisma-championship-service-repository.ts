@@ -1,5 +1,3 @@
-/* eslint-disable camelcase */
-
 import { championshipSchema } from "src/infra/schemas/championship-schema";
 import { matchSchema } from "src/infra/schemas/matches-list-schema";
 import { prisma } from "src/infra/services/prisma";
@@ -7,7 +5,9 @@ import { z } from "zod";
 
 type championshipData = z.infer<typeof championshipSchema>;
 
-export async function upsertChampionship(data: championshipData) {
+export async function upsertChampionship(
+  data: championshipData,
+): Promise<{ id: string }> {
   const championship = await prisma.campeonato.upsert({
     where: {
       temporada: data.edicao_atual.temporada,
@@ -24,7 +24,7 @@ export async function upsertChampionship(data: championshipData) {
     },
   });
 
-  return championship.id;
+  return { id: championship.id };
 }
 
 type matchesListData = z.infer<typeof matchSchema>;
@@ -32,7 +32,7 @@ type matchesListData = z.infer<typeof matchSchema>;
 export async function upsertMatchData(
   matches: matchesListData[],
   championshipId: string,
-) {
+): Promise<void> {
   for (const match of matches) {
     const {
       partida_id,

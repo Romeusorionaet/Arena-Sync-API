@@ -14,7 +14,7 @@ export async function cronJobGetChampionshipMatches() {
   try {
     const responseChampionship = await fetchChampionshipData();
     const dataChampionship = championshipSchema.parse(responseChampionship);
-    const championshipId = await upsertChampionship(dataChampionship);
+    const { id: championshipId } = await upsertChampionship(dataChampionship);
 
     const responseDataMatches = await fetchChampionshipMatches();
     const dataMatchesList = matchesListSchema.parse(responseDataMatches);
@@ -28,6 +28,7 @@ export async function cronJobGetChampionshipMatches() {
 
     const matchesByRounds = dataMatchesList.partidas["fase-unica"];
     const allMatches = Object.values(matchesByRounds).flat();
+
     await upsertMatchData(allMatches, championshipId);
   } catch (error) {
     console.error("Erro ao monitorar partidas:", error);

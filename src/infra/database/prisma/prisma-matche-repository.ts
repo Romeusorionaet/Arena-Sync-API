@@ -25,6 +25,7 @@ export async function findByNearestDateAndTime(): Promise<{ id: string }[]> {
 
   return data;
 }
+
 type MatchData = z.infer<typeof matchDataSchema>;
 
 interface SaveTeamDataProps {
