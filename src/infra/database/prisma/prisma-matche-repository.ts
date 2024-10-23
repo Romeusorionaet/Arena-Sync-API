@@ -153,7 +153,7 @@ export async function saveTeamData({
         await prisma.gol.create({
           data: {
             estatisticaDaPartidaId: estatisticaSalva.id,
-            atletaId: gol.atleta.atleta_id.toString(),
+            atletaId: gol.atleta ? gol.atleta.atleta_id.toString() : null,
             minuto: gol.minuto,
             periodo: gol.periodo,
             gol_contra: gol.gol_contra,
@@ -169,15 +169,25 @@ export async function saveTeamData({
     AMARELO = "AMARELO",
   }
 
-  const salvarCartoes = async (cartoes: any[], cor?: CoresDoCartao) => {
+  interface CartaoProps {
+    atleta: {
+      atleta_id: number;
+    } | null;
+    minuto?: string;
+    periodo: string;
+  }
+
+  const salvarCartoes = async (cartoes: CartaoProps[], cor?: CoresDoCartao) => {
     if (cartoes.length > 0) {
       await Promise.all(
-        cartoes.map(async (cartao: any) => {
+        cartoes.map(async (cartao) => {
           await prisma.cartao.create({
             data: {
-              atletaId: cartao.atleta.atleta_id.toString(),
+              atletaId: cartao.atleta
+                ? cartao.atleta.atleta_id.toString()
+                : null,
               estatisticaDaPartidaId: estatisticaSalva.id,
-              minuto: cartao.minuto,
+              minuto: cartao.minuto ?? "",
               periodo: cartao.periodo,
               cor,
             },
@@ -187,8 +197,10 @@ export async function saveTeamData({
     }
   };
 
-  await salvarCartoes(cartoesAmarelos, CoresDoCartao.AMARELO);
-  await salvarCartoes(cartoesVermelhos, CoresDoCartao.VERMELHO);
+  await Promise.all([
+    await salvarCartoes(cartoesAmarelos, CoresDoCartao.AMARELO),
+    await salvarCartoes(cartoesVermelhos, CoresDoCartao.VERMELHO),
+  ]);
 
   if (substituicoes.length > 0) {
     await Promise.all(
@@ -198,8 +210,8 @@ export async function saveTeamData({
             estatisticaDaPartidaId: estatisticaSalva.id,
             timeId: time.time_id.toString(),
             minuto: substituicao.minuto,
-            entrou: substituicao.entrou.atleta_id.toString(),
-            saiu: substituicao.saiu.atleta_id.toString(),
+            entrouAtletaId: substituicao.entrou.atleta_id.toString(),
+            saiuAtletaId: substituicao.saiu.atleta_id.toString(),
             periodo: substituicao.periodo,
           },
         });

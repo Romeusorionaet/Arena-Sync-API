@@ -62,7 +62,12 @@ const estatisticasSchema = z.object({
 });
 
 const golsSchema = z.object({
-  atleta: z.object({ atleta_id: z.coerce.number(), nome_popular: z.string() }),
+  atleta: z
+    .object({
+      atleta_id: z.coerce.number(),
+      nome_popular: z.string(),
+    })
+    .nullable(),
   minuto: z.string(),
   periodo: z.string(),
   penalti: z.boolean(),
@@ -73,14 +78,14 @@ export const cartoesSchema = z.object({
   amarelo: z.object({
     mandante: z.array(
       z.object({
-        atleta: z.object({ atleta_id: z.coerce.number() }),
+        atleta: z.object({ atleta_id: z.coerce.number() }).nullable(),
         minuto: z.string().optional(),
         periodo: z.string(),
       }),
     ),
     visitante: z.array(
       z.object({
-        atleta: z.object({ atleta_id: z.coerce.number() }),
+        atleta: z.object({ atleta_id: z.coerce.number() }).nullable(),
         minuto: z.string().optional(),
         periodo: z.string(),
       }),
@@ -89,14 +94,14 @@ export const cartoesSchema = z.object({
   vermelho: z.object({
     mandante: z.array(
       z.object({
-        atleta: z.object({ atleta_id: z.coerce.number() }),
+        atleta: z.object({ atleta_id: z.coerce.number() }).nullable(),
         minuto: z.string().optional(),
         periodo: z.string(),
       }),
     ),
     visitante: z.array(
       z.object({
-        atleta: z.object({ atleta_id: z.coerce.number() }),
+        atleta: z.object({ atleta_id: z.coerce.number() }).nullable(),
         minuto: z.string().optional(),
         periodo: z.string(),
       }),
