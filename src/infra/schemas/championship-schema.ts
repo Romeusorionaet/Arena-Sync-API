@@ -1,11 +1,15 @@
 import { z } from "zod";
 
 export const championshipSchema = z.object({
-  championship_id: z.string(),
-  name: z.string(),
+  campeonato_id: z.coerce.number(),
+  nome: z.string(),
   slug: z.string(),
-  season: z.string(),
   status: z.string(),
   logo: z.string(),
-  current_round: z.string(),
+  edicao_atual: z.object({
+    temporada: z.string(),
+  }),
+  rodada_atual: z.object({
+    rodada: z.coerce.number(),
+  }),
 });

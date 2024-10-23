@@ -1,30 +1,38 @@
 /* eslint-disable camelcase */
 
+import { championshipSchema } from "src/infra/schemas/championship-schema";
+import { matchSchema } from "src/infra/schemas/matches-list-schema";
 import { prisma } from "src/infra/services/prisma";
+import { z } from "zod";
 
-export async function findExistingChampionship(temporada: string) {
-  return prisma.campeonato.findUnique({
+type championshipData = z.infer<typeof championshipSchema>;
+
+export async function upsertChampionship(data: championshipData) {
+  const championship = await prisma.campeonato.upsert({
     where: {
-      temporada: temporada.toString(),
+      temporada: data.edicao_atual.temporada,
     },
-  });
-}
-
-export async function createChampionship(data: any) {
-  return prisma.campeonato.create({
-    data: {
+    update: {},
+    create: {
       id: data.campeonato_id.toString(),
       nome: data.nome,
       slug: data.slug,
       logo: data.logo,
       status: data.status,
       temporada: data.edicao_atual.temporada,
-      rodadaAtual: data.rodada_atual.rodada,
+      rodadaAtual: Number(data.rodada_atual.rodada),
     },
   });
+
+  return championship.id;
 }
 
-export async function upsertMatchData(matches: any[], championshipId: string) {
+type matchesListData = z.infer<typeof matchSchema>;
+
+export async function upsertMatchData(
+  matches: matchesListData[],
+  championshipId: string,
+) {
   for (const match of matches) {
     const {
       partida_id,
@@ -41,7 +49,7 @@ export async function upsertMatchData(matches: any[], championshipId: string) {
       create: {
         id: time_mandante.time_id.toString(),
         nome: time_mandante.nome_popular,
-        slug: time_mandante.sigla,
+        sigla: time_mandante.sigla,
         escudo: time_mandante.escudo,
       },
     });
@@ -52,13 +60,15 @@ export async function upsertMatchData(matches: any[], championshipId: string) {
       create: {
         id: time_visitante.time_id.toString(),
         nome: time_visitante.nome_popular,
-        slug: time_visitante.sigla,
+        sigla: time_visitante.sigla,
         escudo: time_visitante.escudo,
       },
     });
 
-    await prisma.partida.create({
-      data: {
+    await prisma.partida.upsert({
+      where: { id: partida_id.toString() },
+      update: {},
+      create: {
         id: partida_id.toString(),
         campeonatoId: championshipId,
         status,
