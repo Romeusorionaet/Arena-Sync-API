@@ -30,3 +30,15 @@ export async function fetchChampionshipMatches() {
   const data = await response.json();
   return data;
 }
+
+export async function fetchMatch({ matchId }: { matchId: string }) {
+  const response = await axios.get(
+    `https://api.api-futebol.com.br/v1/partidas/${matchId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${env.SOCCER_API_KEY}`,
+      },
+    },
+  );
+  return response.data;
+}

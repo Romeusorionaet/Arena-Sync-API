@@ -4,9 +4,9 @@ CREATE TYPE "CoresDoCartao" AS ENUM ('VERMELHO', 'AMARELO');
 -- CreateTable
 CREATE TABLE "atletas" (
     "id" TEXT NOT NULL,
-    "nome" TEXT NOT NULL,
+    "nome" TEXT,
     "nome_popular" TEXT NOT NULL,
-    "posicao" TEXT NOT NULL,
+    "posicao" TEXT,
 
     CONSTRAINT "atletas_pkey" PRIMARY KEY ("id")
 );
@@ -132,11 +132,22 @@ CREATE TABLE "escalacoes" (
 CREATE TABLE "titulares" (
     "id" TEXT NOT NULL,
     "atleta_id" TEXT NOT NULL,
-    "posicao" TEXT NOT NULL,
+    "posicao" TEXT,
     "camisa" TEXT NOT NULL,
     "escalacaoId" TEXT NOT NULL,
 
     CONSTRAINT "titulares_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "reservas" (
+    "id" TEXT NOT NULL,
+    "atleta_id" TEXT NOT NULL,
+    "posicao" TEXT,
+    "camisa" TEXT NOT NULL,
+    "escalacaoId" TEXT NOT NULL,
+
+    CONSTRAINT "reservas_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -146,7 +157,7 @@ CREATE TABLE "substituicoes" (
     "entrou" TEXT NOT NULL,
     "saiu" TEXT NOT NULL,
     "periodo" TEXT NOT NULL,
-    "minuto" TEXT NOT NULL,
+    "minuto" TEXT,
     "estatisticaDaPartidaId" TEXT NOT NULL,
 
     CONSTRAINT "substituicoes_pkey" PRIMARY KEY ("id")
@@ -154,12 +165,6 @@ CREATE TABLE "substituicoes" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Campeonatos_temporada_key" ON "Campeonatos"("temporada");
-
--- CreateIndex
-CREATE UNIQUE INDEX "estatistica_das_partidas_partida_id_key" ON "estatistica_das_partidas"("partida_id");
-
--- CreateIndex
-CREATE UNIQUE INDEX "escalacoes_partida_id_key" ON "escalacoes"("partida_id");
 
 -- AddForeignKey
 ALTER TABLE "partidas" ADD CONSTRAINT "partidas_campeonato_id_fkey" FOREIGN KEY ("campeonato_id") REFERENCES "Campeonatos"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -193,6 +198,9 @@ ALTER TABLE "escalacoes" ADD CONSTRAINT "escalacoes_partida_id_fkey" FOREIGN KEY
 
 -- AddForeignKey
 ALTER TABLE "titulares" ADD CONSTRAINT "titulares_escalacaoId_fkey" FOREIGN KEY ("escalacaoId") REFERENCES "escalacoes"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "reservas" ADD CONSTRAINT "reservas_escalacaoId_fkey" FOREIGN KEY ("escalacaoId") REFERENCES "escalacoes"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "substituicoes" ADD CONSTRAINT "substituicoes_estatisticaDaPartidaId_fkey" FOREIGN KEY ("estatisticaDaPartidaId") REFERENCES "estatistica_das_partidas"("id") ON DELETE CASCADE ON UPDATE CASCADE;

@@ -13,10 +13,10 @@ enum CoresDoCartao {
 }
 
 model Atleta {
-  id          String @id @default(uuid())
-  nome        String
-  nomePopular String @map("nome_popular")
-  posicao     String
+  id          String  @id @default(uuid())
+  nome        String?
+  nomePopular String  @map("nome_popular")
+  posicao     String?
 
   cartao Cartao[]
   gol    Gol[]
@@ -79,7 +79,7 @@ model EstatisticaDaPartida {
   defesas      Int
   desarmes     Int
 
-  partidaId String  @unique @map("partida_id")
+  partidaId String  @map("partida_id")
   partida   Partida @relation(fields: [partidaId], references: [id], onDelete: Cascade)
   timeId    String  @map("time_id")
   time      Time    @relation(fields: [timeId], references: [id], onDelete: Cascade)
@@ -156,18 +156,19 @@ model Escalacao {
   tecnico       String
   esquemaTatico String @map("esquema_tatico")
 
-  partidaId String  @unique @map("partida_id")
+  partidaId String  @map("partida_id")
   partida   Partida @relation(fields: [partidaId], references: [id], onDelete: Cascade)
 
   titular Titular[]
+  reserva Reserva[]
 
   @@map("escalacoes")
 }
 
 model Titular {
-  id       String @id @default(uuid())
-  atletaId String @map("atleta_id")
-  posicao  String
+  id       String  @id @default(uuid())
+  atletaId String  @map("atleta_id")
+  posicao  String?
   camisa   String
 
   escalacaoId String
@@ -176,13 +177,25 @@ model Titular {
   @@map("titulares")
 }
 
+model Reserva {
+  id       String  @id @default(uuid())
+  atletaId String  @map("atleta_id")
+  posicao  String?
+  camisa   String
+
+  escalacaoId String
+  escalacao   Escalacao @relation(fields: [escalacaoId], references: [id], onDelete: Cascade)
+
+  @@map("reservas")
+}
+
 model Substituicao {
-  id      String @id @default(uuid())
-  timeId  String @map("time_id")
+  id      String  @id @default(uuid())
+  timeId  String  @map("time_id")
   entrou  String
   saiu    String
   periodo String
-  minuto  String
+  minuto  String?
 
   estatisticaDaPartidaId String
   estatisticaDaPartida   EstatisticaDaPartida @relation(fields: [estatisticaDaPartidaId], references: [id], onDelete: Cascade)
