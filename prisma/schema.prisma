@@ -27,7 +27,7 @@ model Atleta {
 model Time {
   id     String @id @default(uuid())
   nome   String
-  slug   String
+  sigla  String
   escudo String
 
   estatisticaDaPartida EstatisticaDaPartida[]

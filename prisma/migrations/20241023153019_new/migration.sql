@@ -15,7 +15,7 @@ CREATE TABLE "atletas" (
 CREATE TABLE "times" (
     "id" TEXT NOT NULL,
     "nome" TEXT NOT NULL,
-    "slug" TEXT NOT NULL,
+    "sigla" TEXT NOT NULL,
     "escudo" TEXT NOT NULL,
 
     CONSTRAINT "times_pkey" PRIMARY KEY ("id")
