@@ -1,3 +1,4 @@
+import { Prisma } from ".prisma/client";
 import dayjs from "dayjs";
 import { matchDataSchema } from "src/infra/schemas/match-data-schema";
 import { prisma } from "src/infra/services/prisma";
@@ -24,6 +25,36 @@ export async function findByNearestDateAndTime(): Promise<{ id: string }[]> {
   }
 
   return data;
+}
+
+export async function findManyMatches(
+  page: number,
+  championshipSeason: string,
+  status: "agendado" | "finalizado",
+): Promise<Prisma.PartidaUncheckedCreateInput[] | []> {
+  const currentDate = new Date().toISOString();
+
+  const dateFilter =
+    status === "agendado" ? { gte: currentDate } : { lte: currentDate };
+
+  const matches = await prisma.partida.findMany({
+    where: {
+      campeonato: { temporada: championshipSeason },
+      status,
+      dataRealizacaoIso: dateFilter,
+    },
+    orderBy: {
+      dataRealizacaoIso: status === "agendado" ? "asc" : "desc",
+    },
+    skip: (page - 1) * 10,
+    take: 10,
+  });
+
+  if (matches.length === 0) {
+    return [];
+  }
+
+  return matches;
 }
 
 type MatchData = z.infer<typeof matchDataSchema>;
