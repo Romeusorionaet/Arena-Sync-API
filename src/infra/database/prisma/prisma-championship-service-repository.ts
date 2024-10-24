@@ -28,7 +28,7 @@ export async function upsertChampionship(
   return { id: championship.id };
 }
 
-export async function getChampionships(): Promise<
+export async function findManyChampionships(): Promise<
   Prisma.CampeonatoUncheckedCreateInput[] | []
 > {
   const championships = await prisma.campeonato.findMany();
