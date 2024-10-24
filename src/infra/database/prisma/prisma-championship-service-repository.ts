@@ -1,3 +1,4 @@
+import { Prisma } from ".prisma/client";
 import { championshipSchema } from "src/infra/schemas/championship-schema";
 import { matchSchema } from "src/infra/schemas/matches-list-schema";
 import { prisma } from "src/infra/services/prisma";
@@ -25,6 +26,18 @@ export async function upsertChampionship(
   });
 
   return { id: championship.id };
+}
+
+export async function getChampionships(): Promise<
+  Prisma.CampeonatoUncheckedCreateInput[] | []
+> {
+  const championships = await prisma.campeonato.findMany();
+
+  if (championships.length === 0) {
+    return [];
+  }
+
+  return championships;
 }
 
 type matchesListData = z.infer<typeof matchSchema>;
