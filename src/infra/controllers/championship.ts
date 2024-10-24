@@ -16,7 +16,7 @@ export async function championship(
     }
 
     return reply.status(200).send({
-      championships,
+      campeonato: championships,
     });
   } catch (err) {
     console.error("Error fetching championships:", err);

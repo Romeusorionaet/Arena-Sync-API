@@ -1,11 +1,11 @@
 import cron from "node-cron";
 import { fetchMatch } from "../services/soccer-api";
 
+import { matchDataSchema } from "../schemas/match-data-schema";
 import {
   findByNearestDateAndTime,
   saveTeamData,
-} from "../database/prisma/prisma-matche-repository";
-import { matchDataSchema } from "../schemas/match-data-schema";
+} from "../database/prisma/prisma-match-repository";
 
 export async function cronJobUpdateMatches() {
   try {

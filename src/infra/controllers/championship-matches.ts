@@ -1,7 +1,7 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import { z } from "zod";
-import { findManyMatches } from "../database/prisma/prisma-matche-repository";
 import { matchQuerySchema } from "../schemas/match-query-schema";
+import { findManyMatches } from "../database/prisma/prisma-match-repository";
 
 export async function championshipMatches(
   request: FastifyRequest,
@@ -22,7 +22,7 @@ export async function championshipMatches(
     }
 
     return reply.status(200).send({
-      matches,
+      partidas: matches,
     });
   } catch (err) {
     if (err instanceof z.ZodError) {
