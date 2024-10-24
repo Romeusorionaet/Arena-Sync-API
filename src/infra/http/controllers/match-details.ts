@@ -1,28 +1,29 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import { z } from "zod";
-import { matchQuerySchema } from "../schemas/match-query-schema";
-import { findManyMatches } from "../database/prisma/prisma-match-repository";
+import { findMatchById } from "../../database/prisma/prisma-match-repository";
 
-export async function championshipMatches(
+const paramsSchema = z.object({
+  matchId: z.string(),
+});
+
+export async function matchDetails(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
   try {
-    const { page, championshipSeason, status } = matchQuerySchema.parse(
-      request.query,
-    );
+    const { matchId } = paramsSchema.parse(request.params);
 
-    const matches = await findManyMatches(page, championshipSeason, status);
+    const match = await findMatchById(matchId);
 
-    if (matches.length === 0) {
+    if (!match) {
       return reply.status(200).send({
-        message: "No match found.",
-        matches: [],
+        message: "Match not found.",
+        match: null,
       });
     }
 
     return reply.status(200).send({
-      partidas: matches,
+      partida: match,
     });
   } catch (err) {
     if (err instanceof z.ZodError) {
@@ -31,7 +32,7 @@ export async function championshipMatches(
         error_path: err.errors[0].path,
       });
     } else {
-      console.error("Error fetching championships:", err);
+      console.error("Error fetching match:", err);
 
       return reply.status(500).send({
         error: "Internal Server Error",

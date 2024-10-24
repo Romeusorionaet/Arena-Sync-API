@@ -3,12 +3,12 @@ import {
   fetchChampionshipData,
   fetchChampionshipMatches,
 } from "../services/soccer-api";
-import { championshipSchema } from "../schemas/championship-schema";
+import { championshipSchema } from "../http/schemas/championship-schema";
 import {
   upsertChampionship,
   upsertMatchData,
 } from "../database/prisma/prisma-championship-service-repository";
-import { matchesListSchema } from "../schemas/matches-list-schema";
+import { matchesListSchema } from "../http/schemas/matches-list-schema";
 
 export async function cronJobGetChampionshipMatches() {
   try {

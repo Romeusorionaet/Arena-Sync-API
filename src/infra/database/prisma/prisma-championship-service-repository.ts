@@ -1,6 +1,6 @@
 import { Prisma } from ".prisma/client";
-import { championshipSchema } from "src/infra/schemas/championship-schema";
-import { matchSchema } from "src/infra/schemas/matches-list-schema";
+import { championshipSchema } from "src/infra/http/schemas/championship-schema";
+import { matchSchema } from "src/infra/http/schemas/matches-list-schema";
 import { prisma } from "src/infra/services/prisma";
 import { z } from "zod";
 

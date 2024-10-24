@@ -1,5 +1,6 @@
 import { app } from "./app";
-import { cronJobGetMatch } from "./cron-jobs/cron-job-get-match";
+import { cronJobGetChampionshipMatches } from "./cron-jobs/cron-job-get-champioship";
+import { cronJobUpdateMatches } from "./cron-jobs/cron-job-update-matches";
 import { env } from "./env";
 
 app
@@ -7,8 +8,11 @@ app
     host: "0.0.0.0",
     port: env.PORT,
   })
-  .then(() => {
+  .then(async () => {
     console.log("► HTTP Server Running! Port:", env.PORT);
 
-    cronJobGetMatch();
+    // await Promise.all([
+    //   cronJobGetChampionshipMatches(),
+    //   cronJobUpdateMatches(),
+    // ]);
   });

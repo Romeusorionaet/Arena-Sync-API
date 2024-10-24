@@ -1,6 +1,6 @@
 import { Prisma } from ".prisma/client";
 import dayjs from "dayjs";
-import { matchDataSchema } from "src/infra/schemas/match-data-schema";
+import { matchDataSchema } from "src/infra/http/schemas/match-data-schema";
 import { prisma } from "src/infra/services/prisma";
 import { z } from "zod";
 

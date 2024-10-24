@@ -1,7 +1,7 @@
 import cron from "node-cron";
 import { fetchMatch } from "../services/soccer-api";
 
-import { matchDataSchema } from "../schemas/match-data-schema";
+import { matchDataSchema } from "../http/schemas/match-data-schema";
 import {
   findByNearestDateAndTime,
   saveTeamData,
