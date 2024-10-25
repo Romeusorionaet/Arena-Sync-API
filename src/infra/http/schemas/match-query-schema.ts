@@ -6,4 +6,6 @@ export const matchQuerySchema = z.object({
   status: z.enum(["agendado", "finalizado"]).refine((value) => value, {
     message: 'Status must be one of: "agendado", "finalizado".',
   }),
+  team1: z.string().optional(),
+  team2: z.string().optional(),
 });

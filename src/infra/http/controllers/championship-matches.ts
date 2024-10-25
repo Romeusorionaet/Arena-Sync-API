@@ -3,16 +3,21 @@ import { z } from "zod";
 import { matchQuerySchema } from "../schemas/match-query-schema";
 import { findManyMatches } from "../../database/prisma/prisma-match-repository";
 
-export async function championshipMatches(
+export async function searchMatches(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
   try {
-    const { page, championshipSeason, status } = matchQuerySchema.parse(
-      request.query,
-    );
+    const { page, championshipSeason, status, team1, team2 } =
+      matchQuerySchema.parse(request.query);
 
-    const matches = await findManyMatches(page, championshipSeason, status);
+    const matches = await findManyMatches({
+      page,
+      championshipSeason,
+      status,
+      team1,
+      team2,
+    });
 
     if (matches.length === 0) {
       return reply.status(200).send({

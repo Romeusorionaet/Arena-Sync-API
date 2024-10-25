@@ -2,7 +2,23 @@ import { Prisma } from ".prisma/client";
 import dayjs from "dayjs";
 import { matchDataSchema } from "src/infra/http/schemas/match-data-schema";
 import { prisma } from "src/infra/services/prisma";
+import { createSlugFilter } from "src/infra/utils/create-slug-filter";
 import { z } from "zod";
+
+interface FindManyMatchesProps {
+  page: number;
+  championshipSeason: string;
+  status: "agendado" | "finalizado";
+  team1?: string;
+  team2?: string;
+}
+
+type MatchData = z.infer<typeof matchDataSchema>;
+
+interface SaveTeamDataProps {
+  type: "mandante" | "visitante";
+  matchData: MatchData;
+}
 
 export async function findByNearestDateAndTime(): Promise<{ id: string }[]> {
   const yesterday = dayjs().subtract(1, "day").format("YYYY-MM-DD");
@@ -27,11 +43,13 @@ export async function findByNearestDateAndTime(): Promise<{ id: string }[]> {
   return data;
 }
 
-export async function findManyMatches(
-  page: number,
-  championshipSeason: string,
-  status: "agendado" | "finalizado",
-): Promise<Prisma.PartidaUncheckedCreateInput[] | []> {
+export async function findManyMatches({
+  championshipSeason,
+  page,
+  status,
+  team1,
+  team2,
+}: FindManyMatchesProps): Promise<Prisma.PartidaUncheckedCreateInput[] | []> {
   const currentDate = new Date().toISOString();
 
   const dateFilter =
@@ -42,6 +60,7 @@ export async function findManyMatches(
       campeonato: { temporada: championshipSeason },
       status,
       dataRealizacaoIso: dateFilter,
+      ...createSlugFilter(team1, team2),
     },
     orderBy: {
       dataRealizacaoIso: status === "agendado" ? "asc" : "desc",
@@ -50,11 +69,7 @@ export async function findManyMatches(
     take: 10,
   });
 
-  if (matches.length === 0) {
-    return [];
-  }
-
-  return matches;
+  return matches.length > 0 ? matches : [];
 }
 
 export async function findMatchById(
@@ -153,13 +168,6 @@ export async function findMatchById(
   }
 
   return match;
-}
-
-type MatchData = z.infer<typeof matchDataSchema>;
-
-interface SaveTeamDataProps {
-  type: "mandante" | "visitante";
-  matchData: MatchData;
 }
 
 export async function saveTeamData({
