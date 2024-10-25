@@ -10,39 +10,145 @@ export async function findMatchDetails(
     },
     include: {
       timeMandante: {
-        include: {
+        select: {
+          nome: true,
+          sigla: true,
+          escudo: true,
           estatisticaDaPartida: {
-            include: {
+            select: {
+              defesas: true,
+              desarmes: true,
+              escanteios: true,
+              faltas: true,
+              posseDeBola: true,
+              impedimentos: true,
               cartao: {
-                include: {
-                  atleta: true,
+                select: {
+                  cor: true,
+                  minuto: true,
+                  periodo: true,
+                  atleta: {
+                    select: {
+                      id: true,
+                      nomePopular: true,
+                      titular: {
+                        select: {
+                          camisa: true,
+                          posicao: true,
+                        },
+                      },
+                      Reserva: {
+                        select: {
+                          posicao: true,
+                          camisa: true,
+                        },
+                      },
+                    },
+                  },
                 },
               },
               gol: {
-                include: {
-                  atleta: true,
+                select: {
+                  minuto: true,
+                  periodo: true,
+                  atleta: {
+                    select: {
+                      id: true,
+                      nomePopular: true,
+                      titular: {
+                        select: {
+                          camisa: true,
+                          posicao: true,
+                        },
+                      },
+                      Reserva: {
+                        select: {
+                          posicao: true,
+                          camisa: true,
+                        },
+                      },
+                    },
+                  },
                 },
               },
-              finalizacao: true,
-              passe: true,
+              finalizacao: {
+                select: {
+                  bloqueio: true,
+                  naTrave: true,
+                  noGol: true,
+                  praFora: true,
+                  precisao: true,
+                  total: true,
+                },
+              },
+              passe: {
+                select: {
+                  total: true,
+                  completos: true,
+                  errados: true,
+                  precisao: true,
+                },
+              },
               substituicao: {
-                include: {
-                  entrouAtleta: true,
-                  saiuAtleta: true,
+                select: {
+                  periodo: true,
+                  minuto: true,
+                  entrouAtleta: {
+                    select: {
+                      id: true,
+                      nomePopular: true,
+                      Reserva: {
+                        select: {
+                          camisa: true,
+                          posicao: true,
+                        },
+                      },
+                    },
+                  },
+                  saiuAtleta: {
+                    select: {
+                      id: true,
+                      nomePopular: true,
+                      titular: {
+                        select: {
+                          camisa: true,
+                          posicao: true,
+                        },
+                      },
+                    },
+                  },
                 },
               },
             },
           },
           Escalacao: {
-            include: {
+            select: {
+              tecnico: true,
+              esquemaTatico: true,
               reserva: {
-                include: {
-                  atleta: true,
+                select: {
+                  camisa: true,
+                  posicao: true,
+
+                  atleta: {
+                    select: {
+                      id: true,
+                      nomePopular: true,
+                    },
+                  },
                 },
               },
               titular: {
-                include: {
-                  atleta: true,
+                select: {
+                  camisa: true,
+                  posicao: true,
+
+                  atleta: {
+                    select: {
+                      id: true,
+                      nomePopular: true,
+                    },
+                  },
                 },
               },
             },
@@ -50,39 +156,145 @@ export async function findMatchDetails(
         },
       },
       timeVisitante: {
-        include: {
+        select: {
+          nome: true,
+          sigla: true,
+          escudo: true,
           estatisticaDaPartida: {
-            include: {
+            select: {
+              defesas: true,
+              desarmes: true,
+              escanteios: true,
+              faltas: true,
+              posseDeBola: true,
+              impedimentos: true,
               cartao: {
-                include: {
-                  atleta: true,
+                select: {
+                  cor: true,
+                  minuto: true,
+                  periodo: true,
+                  atleta: {
+                    select: {
+                      id: true,
+                      nomePopular: true,
+                      titular: {
+                        select: {
+                          camisa: true,
+                          posicao: true,
+                        },
+                      },
+                      Reserva: {
+                        select: {
+                          posicao: true,
+                          camisa: true,
+                        },
+                      },
+                    },
+                  },
                 },
               },
               gol: {
-                include: {
-                  atleta: true,
+                select: {
+                  minuto: true,
+                  periodo: true,
+                  atleta: {
+                    select: {
+                      id: true,
+                      nomePopular: true,
+                      titular: {
+                        select: {
+                          camisa: true,
+                          posicao: true,
+                        },
+                      },
+                      Reserva: {
+                        select: {
+                          posicao: true,
+                          camisa: true,
+                        },
+                      },
+                    },
+                  },
                 },
               },
-              finalizacao: true,
-              passe: true,
+              finalizacao: {
+                select: {
+                  bloqueio: true,
+                  naTrave: true,
+                  noGol: true,
+                  praFora: true,
+                  precisao: true,
+                  total: true,
+                },
+              },
+              passe: {
+                select: {
+                  total: true,
+                  completos: true,
+                  errados: true,
+                  precisao: true,
+                },
+              },
               substituicao: {
-                include: {
-                  entrouAtleta: true,
-                  saiuAtleta: true,
+                select: {
+                  periodo: true,
+                  minuto: true,
+                  entrouAtleta: {
+                    select: {
+                      id: true,
+                      nomePopular: true,
+                      Reserva: {
+                        select: {
+                          camisa: true,
+                          posicao: true,
+                        },
+                      },
+                    },
+                  },
+                  saiuAtleta: {
+                    select: {
+                      id: true,
+                      nomePopular: true,
+                      titular: {
+                        select: {
+                          camisa: true,
+                          posicao: true,
+                        },
+                      },
+                    },
+                  },
                 },
               },
             },
           },
           Escalacao: {
-            include: {
+            select: {
+              tecnico: true,
+              esquemaTatico: true,
               reserva: {
-                include: {
-                  atleta: true,
+                select: {
+                  camisa: true,
+                  posicao: true,
+
+                  atleta: {
+                    select: {
+                      id: true,
+                      nomePopular: true,
+                    },
+                  },
                 },
               },
               titular: {
-                include: {
-                  atleta: true,
+                select: {
+                  camisa: true,
+                  posicao: true,
+
+                  atleta: {
+                    select: {
+                      id: true,
+                      nomePopular: true,
+                    },
+                  },
                 },
               },
             },
