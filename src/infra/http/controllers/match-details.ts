@@ -1,6 +1,6 @@
+import { findMatchDetails } from "src/infra/database/prisma/match/find-match-details";
 import { FastifyRequest, FastifyReply } from "fastify";
 import { z } from "zod";
-import { findMatchById } from "../../database/prisma/prisma-match-repository";
 
 const paramsSchema = z.object({
   matchId: z.string(),
@@ -13,7 +13,7 @@ export async function matchDetails(
   try {
     const { matchId } = paramsSchema.parse(request.params);
 
-    const match = await findMatchById(matchId);
+    const match = await findMatchDetails(matchId);
 
     if (!match) {
       return reply.status(200).send({

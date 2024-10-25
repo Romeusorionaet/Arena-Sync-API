@@ -1,5 +1,5 @@
-import { FastifyRequest, FastifyReply } from "fastify";
 import { findManyAthletes } from "src/infra/database/prisma/athlete/find-many-athletes";
+import { FastifyRequest, FastifyReply } from "fastify";
 
 export async function getAthletes(
   request: FastifyRequest,

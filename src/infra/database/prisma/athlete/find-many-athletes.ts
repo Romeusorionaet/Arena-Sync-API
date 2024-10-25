@@ -1,5 +1,5 @@
-import { Prisma } from "@prisma/client";
 import { prisma } from "src/infra/services/prisma";
+import { Prisma } from "@prisma/client";
 
 export async function findManyAthletes(): Promise<
   Prisma.AtletaUncheckedCreateInput[] | []

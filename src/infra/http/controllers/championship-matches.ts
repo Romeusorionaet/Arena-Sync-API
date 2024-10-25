@@ -1,7 +1,7 @@
+import { findManyMatches } from "src/infra/database/prisma/match/find-many-matches";
+import { matchQuerySchema } from "../schemas/match-query-schema";
 import { FastifyRequest, FastifyReply } from "fastify";
 import { z } from "zod";
-import { matchQuerySchema } from "../schemas/match-query-schema";
-import { findManyMatches } from "../../database/prisma/prisma-match-repository";
 
 export async function searchMatches(
   request: FastifyRequest,

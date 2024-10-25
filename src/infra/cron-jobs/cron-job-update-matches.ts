@@ -1,15 +1,12 @@
-import cron from "node-cron";
-import { fetchMatch } from "../services/soccer-api";
-
+import { findMatchesByNearestDateAndTime } from "../database/prisma/match/find-matches-by-nearest-date-and-time";
+import { saveMatchDetails } from "../database/prisma/match/save-match-details";
 import { matchDataSchema } from "../http/schemas/match-data-schema";
-import {
-  findByNearestDateAndTime,
-  saveTeamData,
-} from "../database/prisma/prisma-match-repository";
+import { fetchMatch } from "../services/soccer-api";
+import cron from "node-cron";
 
 export async function cronJobUpdateMatches() {
   try {
-    const matchIdList = await findByNearestDateAndTime();
+    const matchIdList = await findMatchesByNearestDateAndTime();
 
     if (matchIdList.length === 0) {
       return;
@@ -22,8 +19,8 @@ export async function cronJobUpdateMatches() {
         const data = matchDataSchema.parse(matchData);
 
         await Promise.all([
-          saveTeamData({ type: "mandante", matchData: data }),
-          saveTeamData({ type: "visitante", matchData: data }),
+          saveMatchDetails({ type: "mandante", matchData: data }),
+          saveMatchDetails({ type: "visitante", matchData: data }),
         ]);
       } catch (error) {
         console.error(`Erro ao buscar dados da partida`, error);
@@ -34,4 +31,4 @@ export async function cronJobUpdateMatches() {
   }
 }
 
-cron.schedule("0 1 * * *", cronJobUpdateMatches);
+cron.schedule("0 1 * 4-11 *", cronJobUpdateMatches);

@@ -1,5 +1,5 @@
-import axios from "axios";
 import { env } from "../env";
+import axios from "axios";
 
 export async function fetchChampionshipData() {
   const response = await axios.get(

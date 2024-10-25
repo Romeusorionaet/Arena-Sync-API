@@ -1,5 +1,5 @@
+import { findManyTeams } from "src/infra/database/prisma/team/find-many-teams";
 import { FastifyRequest, FastifyReply } from "fastify";
-import { findManyTeams } from "src/infra/database/prisma/teams/find-many-Teams";
 
 export async function getTeams(request: FastifyRequest, reply: FastifyReply) {
   try {
@@ -7,7 +7,7 @@ export async function getTeams(request: FastifyRequest, reply: FastifyReply) {
 
     if (teams.length === 0) {
       return reply.status(200).send({
-        message: "No championship found.",
+        message: "No teams found.",
         teams: [],
       });
     }

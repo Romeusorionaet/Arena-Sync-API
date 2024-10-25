@@ -1,5 +1,5 @@
+import { findManyChampionships } from "src/infra/database/prisma/championship/find-many-championships";
 import { FastifyRequest, FastifyReply } from "fastify";
-import { findManyChampionships } from "../../database/prisma/prisma-championship-service-repository";
 
 export async function championship(
   request: FastifyRequest,

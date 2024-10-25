@@ -1,5 +1,5 @@
+import { findTeamDetails } from "src/infra/database/prisma/team/find-team-details";
 import { FastifyRequest, FastifyReply } from "fastify";
-import { findTeamDetails } from "src/infra/database/prisma/teams/find-team-details";
 import { z } from "zod";
 
 const paramsSchema = z.object({
