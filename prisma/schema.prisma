@@ -21,7 +21,7 @@ model Atleta {
   cartao               Cartao[]
   gol                  Gol[]
   titular              Titular[]
-  Reserva              Reserva[]
+  reserva              Reserva[]
   entrouEmSubstituicao Substituicao[] @relation("entrouAtleta")
   saiuEmSubstituicao   Substituicao[] @relation("saiuAtleta")
 
@@ -37,8 +37,8 @@ model Time {
   estatisticaDaPartida EstatisticaDaPartida[]
   partidasMandante     Partida[]              @relation("mandanteTime")
   partidasVisitante    Partida[]              @relation("visitanteTime")
-  Escalacao            Escalacao[]
-  Substituicao         Substituicao[]
+  escalacao            Escalacao[]
+  substituicao         Substituicao[]
 
   @@map("times")
 }
