@@ -3,6 +3,7 @@ import { championship } from "../controllers/championship";
 import { matchDetails } from "../controllers/match-details";
 import { searchMatches } from "../controllers/championship-matches";
 import { getTeams } from "../controllers/get-teams";
+import { getTeamDetails } from "../controllers/get-team-details";
 
 // TODO dividir routas
 export async function championshipRoutes(app: FastifyInstance) {
@@ -10,4 +11,5 @@ export async function championshipRoutes(app: FastifyInstance) {
   app.get("/championships/matches", searchMatches);
   app.get("/match/:matchId", matchDetails);
   app.get("/teams", getTeams);
+  app.get("/team/details/:teamId", getTeamDetails);
 }
