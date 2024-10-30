@@ -17,6 +17,7 @@ export async function findManyNearestMatches(season: string) {
       campeonato: {
         temporada: season,
       },
+      status: "agendado",
       dataRealizacaoIso: {
         gte: tomorrowStart,
         lte: threeDaysEnd,
