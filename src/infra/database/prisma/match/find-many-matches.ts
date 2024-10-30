@@ -1,6 +1,5 @@
 import { createSlugFilter } from "src/infra/utils/create-slug-filter";
 import { prisma } from "src/infra/services/prisma";
-import { Prisma } from "@prisma/client";
 
 interface FindManyMatchesProps {
   page: number;
@@ -10,13 +9,31 @@ interface FindManyMatchesProps {
   team2?: string;
 }
 
+type MatchResult = {
+  id: string;
+  dataRealizacaoIso: string;
+  estadio: string | null;
+  placar: string | null;
+  placarMandante: number | null;
+  placarVisitante: number | null;
+  status: string;
+  timeMandante: {
+    escudo: string;
+    sigla: string;
+  };
+  timeVisitante: {
+    escudo: string;
+    sigla: string;
+  };
+};
+
 export async function findManyMatches({
   championshipSeason,
   page,
   status,
   team1,
   team2,
-}: FindManyMatchesProps): Promise<Prisma.PartidaUncheckedCreateInput[] | []> {
+}: FindManyMatchesProps): Promise<MatchResult[] | []> {
   const currentDate = new Date().toISOString();
 
   const dateFilter =
@@ -28,6 +45,27 @@ export async function findManyMatches({
       status,
       dataRealizacaoIso: dateFilter,
       ...createSlugFilter(team1, team2),
+    },
+    select: {
+      id: true,
+      dataRealizacaoIso: true,
+      estadio: true,
+      placar: true,
+      placarMandante: true,
+      placarVisitante: true,
+      status: true,
+      timeMandante: {
+        select: {
+          escudo: true,
+          sigla: true,
+        },
+      },
+      timeVisitante: {
+        select: {
+          escudo: true,
+          sigla: true,
+        },
+      },
     },
     orderBy: {
       dataRealizacaoIso: status === "agendado" ? "asc" : "desc",

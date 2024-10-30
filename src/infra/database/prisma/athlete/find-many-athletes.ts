@@ -9,8 +9,8 @@ export async function findManyAthletes(
       id: true,
       nomePopular: true,
     },
-    skip: (page - 1) * 10,
-    take: 10,
+    skip: (page - 1) * 30,
+    take: 30,
   });
 
   return athletes.length > 0 ? athletes : [];

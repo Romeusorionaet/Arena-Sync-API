@@ -8,23 +8,46 @@ export function createSlugFilter(
     return {
       OR: [
         {
-          slug: {
-            contains: `${team1}-${team2}`,
-            mode: "insensitive" as Prisma.QueryMode,
-          },
+          AND: [
+            {
+              slug: {
+                contains: team1,
+                mode: "insensitive" as Prisma.QueryMode,
+              },
+            },
+            {
+              slug: {
+                contains: team2,
+                mode: "insensitive" as Prisma.QueryMode,
+              },
+            },
+          ],
         },
         {
-          slug: {
-            contains: `${team2}-${team1}`,
-            mode: "insensitive" as Prisma.QueryMode,
-          },
+          AND: [
+            {
+              slug: {
+                contains: team2,
+                mode: "insensitive" as Prisma.QueryMode,
+              },
+            },
+            {
+              slug: {
+                contains: team1,
+                mode: "insensitive" as Prisma.QueryMode,
+              },
+            },
+          ],
         },
       ],
     };
   } else if (team1 || team2) {
     const team = team1 || team2;
     return {
-      slug: { contains: `${team}-`, mode: "insensitive" as Prisma.QueryMode },
+      slug: {
+        contains: team,
+        mode: "insensitive" as Prisma.QueryMode,
+      },
     };
   }
   return {};

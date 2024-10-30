@@ -5,8 +5,8 @@ export async function findManyTeams(
   page: number,
 ): Promise<Prisma.TimeUncheckedCreateInput[] | []> {
   const teams = await prisma.time.findMany({
-    skip: (page - 1) * 10,
-    take: 10,
+    skip: (page - 1) * 30,
+    take: 30,
   });
 
   return teams.length > 0 ? teams : [];

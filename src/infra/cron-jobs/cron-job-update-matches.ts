@@ -31,4 +31,4 @@ export async function cronJobUpdateMatches() {
   }
 }
 
-cron.schedule("0 1 * 4-11 *", cronJobUpdateMatches);
+cron.schedule("0 1 * 4-12 *", cronJobUpdateMatches);

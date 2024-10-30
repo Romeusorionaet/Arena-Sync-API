@@ -23,7 +23,7 @@ export async function getAthletes(
     }
 
     return reply.status(200).send({
-      times: athletes,
+      athletes,
     });
   } catch (err) {
     console.error("Error fetching athletes:", err);
