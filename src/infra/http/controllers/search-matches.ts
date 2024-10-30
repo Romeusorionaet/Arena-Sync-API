@@ -36,7 +36,7 @@ export async function searchMatches(
         error_path: err.errors[0].path,
       });
     } else {
-      console.error("Error fetching championships:", err);
+      console.error("Error fetching matches:", err);
 
       return reply.status(500).send({
         error: "Internal Server Error",

@@ -1,7 +1,7 @@
 import { findManyChampionships } from "src/infra/database/prisma/championship/find-many-championships";
 import { FastifyRequest, FastifyReply } from "fastify";
 
-export async function championship(
+export async function getChampionship(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
@@ -16,7 +16,7 @@ export async function championship(
     }
 
     return reply.status(200).send({
-      campeonato: championships,
+      campeonatos: championships,
     });
   } catch (err) {
     console.error("Error fetching championships:", err);

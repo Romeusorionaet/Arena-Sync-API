@@ -1,10 +1,13 @@
 import { prisma } from "src/infra/services/prisma";
-import { Prisma } from ".prisma/client";
 
 export async function findManyChampionships(): Promise<
-  Prisma.CampeonatoUncheckedCreateInput[] | []
+  { temporada: string }[] | []
 > {
-  const championships = await prisma.campeonato.findMany();
+  const championships = await prisma.campeonato.findMany({
+    select: {
+      temporada: true,
+    },
+  });
 
   if (championships.length === 0) {
     return [];
