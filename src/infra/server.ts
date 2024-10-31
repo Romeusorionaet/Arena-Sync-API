@@ -11,8 +11,8 @@ app
   .then(async () => {
     console.log("► HTTP Server Running! Port:", env.PORT);
 
-    // await Promise.all([
-    //   cronJobGetChampionshipMatches(),
-    //   cronJobUpdateMatches(),
-    // ]);
+    await Promise.all([
+      cronJobGetChampionshipMatches(),
+      cronJobUpdateMatches(),
+    ]);
   });

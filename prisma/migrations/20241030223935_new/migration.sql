@@ -41,12 +41,12 @@ CREATE TABLE "partidas" (
     "status" TEXT NOT NULL,
     "slug" TEXT NOT NULL,
     "data_realizacao_iso" TEXT NOT NULL,
-    "time_mandante_id" TEXT NOT NULL,
-    "time_visitante_id" TEXT NOT NULL,
-    "placar_mandante_id" INTEGER,
-    "placar_visitante_id" INTEGER,
+    "placar_mandante" INTEGER,
+    "placar_visitante" INTEGER,
     "estadio" TEXT,
     "campeonato_id" TEXT NOT NULL,
+    "time_mandante_id" TEXT NOT NULL,
+    "time_visitante_id" TEXT NOT NULL,
 
     CONSTRAINT "partidas_pkey" PRIMARY KEY ("id")
 );
@@ -73,7 +73,7 @@ CREATE TABLE "cartoes" (
     "minuto" TEXT NOT NULL,
     "periodo" TEXT NOT NULL,
     "estatistica_da_partida" TEXT NOT NULL,
-    "atleta_id" TEXT NOT NULL,
+    "atleta_id" TEXT,
 
     CONSTRAINT "cartoes_pkey" PRIMARY KEY ("id")
 );
@@ -86,7 +86,7 @@ CREATE TABLE "gols" (
     "penalti" BOOLEAN NOT NULL,
     "gol_contra" BOOLEAN NOT NULL,
     "estatistica_da_partida" TEXT NOT NULL,
-    "atleta_id" TEXT NOT NULL,
+    "atleta_id" TEXT,
 
     CONSTRAINT "gols_pkey" PRIMARY KEY ("id")
 );
@@ -120,10 +120,10 @@ CREATE TABLE "finalizacoes" (
 -- CreateTable
 CREATE TABLE "escalacoes" (
     "id" TEXT NOT NULL,
-    "time_id" TEXT NOT NULL,
     "tecnico" TEXT NOT NULL,
     "esquema_tatico" TEXT NOT NULL,
     "partida_id" TEXT NOT NULL,
+    "time_id" TEXT NOT NULL,
 
     CONSTRAINT "escalacoes_pkey" PRIMARY KEY ("id")
 );
@@ -131,10 +131,10 @@ CREATE TABLE "escalacoes" (
 -- CreateTable
 CREATE TABLE "titulares" (
     "id" TEXT NOT NULL,
-    "atleta_id" TEXT NOT NULL,
     "posicao" TEXT,
     "camisa" TEXT NOT NULL,
-    "escalacaoId" TEXT NOT NULL,
+    "escalacao_id" TEXT NOT NULL,
+    "atleta_id" TEXT NOT NULL,
 
     CONSTRAINT "titulares_pkey" PRIMARY KEY ("id")
 );
@@ -142,10 +142,10 @@ CREATE TABLE "titulares" (
 -- CreateTable
 CREATE TABLE "reservas" (
     "id" TEXT NOT NULL,
-    "atleta_id" TEXT NOT NULL,
     "posicao" TEXT,
     "camisa" TEXT NOT NULL,
     "escalacaoId" TEXT NOT NULL,
+    "atleta_id" TEXT NOT NULL,
 
     CONSTRAINT "reservas_pkey" PRIMARY KEY ("id")
 );
@@ -153,12 +153,12 @@ CREATE TABLE "reservas" (
 -- CreateTable
 CREATE TABLE "substituicoes" (
     "id" TEXT NOT NULL,
-    "time_id" TEXT NOT NULL,
-    "entrou" TEXT NOT NULL,
-    "saiu" TEXT NOT NULL,
     "periodo" TEXT NOT NULL,
     "minuto" TEXT,
     "estatisticaDaPartidaId" TEXT NOT NULL,
+    "time_id" TEXT NOT NULL,
+    "entrouAtletaId" TEXT NOT NULL,
+    "saiuAtletaId" TEXT NOT NULL,
 
     CONSTRAINT "substituicoes_pkey" PRIMARY KEY ("id")
 );
@@ -167,7 +167,13 @@ CREATE TABLE "substituicoes" (
 CREATE UNIQUE INDEX "Campeonatos_temporada_key" ON "Campeonatos"("temporada");
 
 -- AddForeignKey
-ALTER TABLE "partidas" ADD CONSTRAINT "partidas_campeonato_id_fkey" FOREIGN KEY ("campeonato_id") REFERENCES "Campeonatos"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "partidas" ADD CONSTRAINT "partidas_campeonato_id_fkey" FOREIGN KEY ("campeonato_id") REFERENCES "Campeonatos"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "partidas" ADD CONSTRAINT "partidas_time_mandante_id_fkey" FOREIGN KEY ("time_mandante_id") REFERENCES "times"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "partidas" ADD CONSTRAINT "partidas_time_visitante_id_fkey" FOREIGN KEY ("time_visitante_id") REFERENCES "times"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "estatistica_das_partidas" ADD CONSTRAINT "estatistica_das_partidas_partida_id_fkey" FOREIGN KEY ("partida_id") REFERENCES "partidas"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -179,13 +185,13 @@ ALTER TABLE "estatistica_das_partidas" ADD CONSTRAINT "estatistica_das_partidas_
 ALTER TABLE "cartoes" ADD CONSTRAINT "cartoes_estatistica_da_partida_fkey" FOREIGN KEY ("estatistica_da_partida") REFERENCES "estatistica_das_partidas"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "cartoes" ADD CONSTRAINT "cartoes_atleta_id_fkey" FOREIGN KEY ("atleta_id") REFERENCES "atletas"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "cartoes" ADD CONSTRAINT "cartoes_atleta_id_fkey" FOREIGN KEY ("atleta_id") REFERENCES "atletas"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "gols" ADD CONSTRAINT "gols_estatistica_da_partida_fkey" FOREIGN KEY ("estatistica_da_partida") REFERENCES "estatistica_das_partidas"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "gols" ADD CONSTRAINT "gols_atleta_id_fkey" FOREIGN KEY ("atleta_id") REFERENCES "atletas"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "gols" ADD CONSTRAINT "gols_atleta_id_fkey" FOREIGN KEY ("atleta_id") REFERENCES "atletas"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "passes" ADD CONSTRAINT "passes_estatistica_da_partida_fkey" FOREIGN KEY ("estatistica_da_partida") REFERENCES "estatistica_das_partidas"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -197,10 +203,28 @@ ALTER TABLE "finalizacoes" ADD CONSTRAINT "finalizacoes_estatistica_da_partida_f
 ALTER TABLE "escalacoes" ADD CONSTRAINT "escalacoes_partida_id_fkey" FOREIGN KEY ("partida_id") REFERENCES "partidas"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "titulares" ADD CONSTRAINT "titulares_escalacaoId_fkey" FOREIGN KEY ("escalacaoId") REFERENCES "escalacoes"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "escalacoes" ADD CONSTRAINT "escalacoes_time_id_fkey" FOREIGN KEY ("time_id") REFERENCES "times"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "titulares" ADD CONSTRAINT "titulares_escalacao_id_fkey" FOREIGN KEY ("escalacao_id") REFERENCES "escalacoes"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "titulares" ADD CONSTRAINT "titulares_atleta_id_fkey" FOREIGN KEY ("atleta_id") REFERENCES "atletas"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "reservas" ADD CONSTRAINT "reservas_escalacaoId_fkey" FOREIGN KEY ("escalacaoId") REFERENCES "escalacoes"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "reservas" ADD CONSTRAINT "reservas_atleta_id_fkey" FOREIGN KEY ("atleta_id") REFERENCES "atletas"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "substituicoes" ADD CONSTRAINT "substituicoes_estatisticaDaPartidaId_fkey" FOREIGN KEY ("estatisticaDaPartidaId") REFERENCES "estatistica_das_partidas"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "substituicoes" ADD CONSTRAINT "substituicoes_time_id_fkey" FOREIGN KEY ("time_id") REFERENCES "times"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "substituicoes" ADD CONSTRAINT "substituicoes_entrouAtletaId_fkey" FOREIGN KEY ("entrouAtletaId") REFERENCES "atletas"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "substituicoes" ADD CONSTRAINT "substituicoes_saiuAtletaId_fkey" FOREIGN KEY ("saiuAtletaId") REFERENCES "atletas"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
