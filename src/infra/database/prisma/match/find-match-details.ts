@@ -15,6 +15,7 @@ export async function findMatchDetails(
           sigla: true,
           escudo: true,
           estatisticaDaPartida: {
+            where: { partidaId: id },
             select: {
               defesas: true,
               desarmes: true,
@@ -37,7 +38,7 @@ export async function findMatchDetails(
                           posicao: true,
                         },
                       },
-                      Reserva: {
+                      reserva: {
                         select: {
                           posicao: true,
                           camisa: true,
@@ -61,7 +62,7 @@ export async function findMatchDetails(
                           posicao: true,
                         },
                       },
-                      Reserva: {
+                      reserva: {
                         select: {
                           posicao: true,
                           camisa: true,
@@ -97,7 +98,7 @@ export async function findMatchDetails(
                     select: {
                       id: true,
                       nomePopular: true,
-                      Reserva: {
+                      reserva: {
                         select: {
                           camisa: true,
                           posicao: true,
@@ -121,7 +122,8 @@ export async function findMatchDetails(
               },
             },
           },
-          Escalacao: {
+          escalacao: {
+            where: { partidaId: id },
             select: {
               tecnico: true,
               esquemaTatico: true,
@@ -161,7 +163,9 @@ export async function findMatchDetails(
           sigla: true,
           escudo: true,
           estatisticaDaPartida: {
+            where: { partidaId: id },
             select: {
+              id: true,
               defesas: true,
               desarmes: true,
               escanteios: true,
@@ -183,7 +187,7 @@ export async function findMatchDetails(
                           posicao: true,
                         },
                       },
-                      Reserva: {
+                      reserva: {
                         select: {
                           posicao: true,
                           camisa: true,
@@ -207,7 +211,7 @@ export async function findMatchDetails(
                           posicao: true,
                         },
                       },
-                      Reserva: {
+                      reserva: {
                         select: {
                           posicao: true,
                           camisa: true,
@@ -243,7 +247,7 @@ export async function findMatchDetails(
                     select: {
                       id: true,
                       nomePopular: true,
-                      Reserva: {
+                      reserva: {
                         select: {
                           camisa: true,
                           posicao: true,
@@ -267,7 +271,8 @@ export async function findMatchDetails(
               },
             },
           },
-          Escalacao: {
+          escalacao: {
+            where: { partidaId: id },
             select: {
               tecnico: true,
               esquemaTatico: true,
