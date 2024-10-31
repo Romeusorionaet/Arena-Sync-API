@@ -130,7 +130,7 @@ export async function saveMatchDetails({
           data: {
             estatisticaDaPartidaId: estatisticaSalva.id,
             atletaId: gol.atleta ? gol.atleta.atleta_id.toString() : null,
-            minuto: gol.minuto,
+            minuto: gol.minuto || "",
             periodo: gol.periodo,
             gol_contra: gol.gol_contra,
             penalti: gol.penalti,
@@ -149,7 +149,7 @@ export async function saveMatchDetails({
     atleta: {
       atleta_id: number;
     } | null;
-    minuto?: string;
+    minuto: string | null;
     periodo: string;
   }
 

@@ -34,7 +34,7 @@ export async function findAthleteDetails(id: string) {
           },
         },
       },
-      Reserva: {
+      reserva: {
         select: {
           camisa: true,
           posicao: true,

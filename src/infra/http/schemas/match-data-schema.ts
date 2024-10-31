@@ -68,7 +68,7 @@ const golsSchema = z.object({
       nome_popular: z.string(),
     })
     .nullable(),
-  minuto: z.string(),
+  minuto: z.string().nullable(),
   periodo: z.string(),
   penalti: z.boolean(),
   gol_contra: boolean(),
@@ -79,14 +79,14 @@ export const cartoesSchema = z.object({
     mandante: z.array(
       z.object({
         atleta: z.object({ atleta_id: z.coerce.number() }).nullable(),
-        minuto: z.string().optional(),
+        minuto: z.string().nullable(),
         periodo: z.string(),
       }),
     ),
     visitante: z.array(
       z.object({
         atleta: z.object({ atleta_id: z.coerce.number() }).nullable(),
-        minuto: z.string().optional(),
+        minuto: z.string().nullable(),
         periodo: z.string(),
       }),
     ),
@@ -95,14 +95,14 @@ export const cartoesSchema = z.object({
     mandante: z.array(
       z.object({
         atleta: z.object({ atleta_id: z.coerce.number() }).nullable(),
-        minuto: z.string().optional(),
+        minuto: z.string().nullable(),
         periodo: z.string(),
       }),
     ),
     visitante: z.array(
       z.object({
         atleta: z.object({ atleta_id: z.coerce.number() }).nullable(),
-        minuto: z.string().optional(),
+        minuto: z.string().nullable(),
         periodo: z.string(),
       }),
     ),
