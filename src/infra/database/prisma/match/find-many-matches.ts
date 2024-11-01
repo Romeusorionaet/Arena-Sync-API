@@ -1,5 +1,6 @@
 import { createSlugFilter } from "src/infra/utils/create-slug-filter";
 import { prisma } from "src/infra/services/prisma";
+import { normalizeSearchTerm } from "src/infra/utils/normalizeSearchTerm";
 
 interface FindManyMatchesProps {
   page: number;
@@ -36,15 +37,26 @@ export async function findManyMatches({
 }: FindManyMatchesProps): Promise<MatchResult[] | []> {
   const currentDate = new Date().toISOString();
 
+  const startOfDay = new Date(currentDate);
+  startOfDay.setHours(0, 0, 0, 0);
+
+  const endOfDay = new Date(currentDate);
+  endOfDay.setHours(23, 59, 59, 999);
+
   const dateFilter =
-    status === "agendado" ? { gte: currentDate } : { lte: currentDate };
+    status === "agendado"
+      ? { gte: startOfDay.toISOString(), lte: endOfDay.toISOString() }
+      : { lte: currentDate.toString() };
+
+  const normalizedTeam1 = team1 ? normalizeSearchTerm(team1) : undefined;
+  const normalizedTeam2 = team2 ? normalizeSearchTerm(team2) : undefined;
 
   const matches = await prisma.partida.findMany({
     where: {
       campeonato: { temporada: championshipSeason },
       status,
       dataRealizacaoIso: dateFilter,
-      ...createSlugFilter(team1, team2),
+      ...createSlugFilter(normalizedTeam1, normalizedTeam2),
     },
     select: {
       id: true,
