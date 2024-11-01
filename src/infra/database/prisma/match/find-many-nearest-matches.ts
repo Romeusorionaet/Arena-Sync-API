@@ -2,10 +2,7 @@ import { prisma } from "src/infra/services/prisma";
 
 export async function findManyNearestMatches(season: string) {
   const today = new Date();
-
-  const tomorrow = new Date(today);
-  tomorrow.setDate(today.getDate() + 1);
-  const tomorrowStart = tomorrow.toISOString().split("T")[0] + "T00:00:00.000Z";
+  const todayStart = today.toISOString().split("T")[0] + "T00:00:00.000Z";
 
   const threeDaysLater = new Date(today);
   threeDaysLater.setDate(today.getDate() + 3);
@@ -19,7 +16,7 @@ export async function findManyNearestMatches(season: string) {
       },
       status: "agendado",
       dataRealizacaoIso: {
-        gte: tomorrowStart,
+        gte: todayStart,
         lte: threeDaysEnd,
       },
     },
