@@ -4,14 +4,21 @@ import dayjs from "dayjs";
 export async function findMatchesByNearestDateAndTime(): Promise<
   { id: string }[]
 > {
-  const yesterday = dayjs().subtract(1, "day").format("YYYY-MM-DD");
+  const startOfYesterday = dayjs()
+    .subtract(1, "day")
+    .startOf("day")
+    .format("YYYY-MM-DDTHH:mm:ss");
+  const endOfYesterday = dayjs()
+    .subtract(1, "day")
+    .endOf("day")
+    .format("YYYY-MM-DDTHH:mm:ss");
 
   const data = await prisma.partida.findMany({
     where: {
-      status: "finalizado",
+      status: "agendado",
       dataRealizacaoIso: {
-        gte: `${yesterday}T00:00:00`,
-        lt: `${yesterday}T23:59:59`,
+        gte: startOfYesterday,
+        lt: endOfYesterday,
       },
     },
     select: {

@@ -17,6 +17,7 @@ export async function cronJobUpdateMatches() {
       const matchIdList = await findMatchesByNearestDateAndTime();
 
       if (matchIdList.length === 0) {
+        console.log("Cron-Job foi execultado mas não houve alteração.");
         return;
       }
 
