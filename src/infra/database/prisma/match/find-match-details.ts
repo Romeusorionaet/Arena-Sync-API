@@ -33,12 +33,22 @@ export async function findMatchDetails(
                       id: true,
                       nomePopular: true,
                       titular: {
+                        where: {
+                          escalacao: {
+                            partidaId: id,
+                          },
+                        },
                         select: {
                           camisa: true,
                           posicao: true,
                         },
                       },
                       reserva: {
+                        where: {
+                          escalacao: {
+                            partidaId: id,
+                          },
+                        },
                         select: {
                           posicao: true,
                           camisa: true,
@@ -57,12 +67,22 @@ export async function findMatchDetails(
                       id: true,
                       nomePopular: true,
                       titular: {
+                        where: {
+                          escalacao: {
+                            partidaId: id,
+                          },
+                        },
                         select: {
                           camisa: true,
                           posicao: true,
                         },
                       },
                       reserva: {
+                        where: {
+                          escalacao: {
+                            partidaId: id,
+                          },
+                        },
                         select: {
                           posicao: true,
                           camisa: true,
@@ -99,6 +119,11 @@ export async function findMatchDetails(
                       id: true,
                       nomePopular: true,
                       reserva: {
+                        where: {
+                          escalacao: {
+                            partidaId: id,
+                          },
+                        },
                         select: {
                           camisa: true,
                           posicao: true,
@@ -111,6 +136,11 @@ export async function findMatchDetails(
                       id: true,
                       nomePopular: true,
                       titular: {
+                        where: {
+                          escalacao: {
+                            partidaId: id,
+                          },
+                        },
                         select: {
                           camisa: true,
                           posicao: true,
@@ -131,7 +161,6 @@ export async function findMatchDetails(
                 select: {
                   camisa: true,
                   posicao: true,
-
                   atleta: {
                     select: {
                       id: true,
@@ -182,12 +211,22 @@ export async function findMatchDetails(
                       id: true,
                       nomePopular: true,
                       titular: {
+                        where: {
+                          escalacao: {
+                            partidaId: id,
+                          },
+                        },
                         select: {
                           camisa: true,
                           posicao: true,
                         },
                       },
                       reserva: {
+                        where: {
+                          escalacao: {
+                            partidaId: id,
+                          },
+                        },
                         select: {
                           posicao: true,
                           camisa: true,
@@ -206,12 +245,22 @@ export async function findMatchDetails(
                       id: true,
                       nomePopular: true,
                       titular: {
+                        where: {
+                          escalacao: {
+                            partidaId: id,
+                          },
+                        },
                         select: {
                           camisa: true,
                           posicao: true,
                         },
                       },
                       reserva: {
+                        where: {
+                          escalacao: {
+                            partidaId: id,
+                          },
+                        },
                         select: {
                           posicao: true,
                           camisa: true,
@@ -248,6 +297,11 @@ export async function findMatchDetails(
                       id: true,
                       nomePopular: true,
                       reserva: {
+                        where: {
+                          escalacao: {
+                            partidaId: id,
+                          },
+                        },
                         select: {
                           camisa: true,
                           posicao: true,
@@ -260,6 +314,11 @@ export async function findMatchDetails(
                       id: true,
                       nomePopular: true,
                       titular: {
+                        where: {
+                          escalacao: {
+                            partidaId: id,
+                          },
+                        },
                         select: {
                           camisa: true,
                           posicao: true,
