@@ -43,11 +43,6 @@ export async function findManyMatches({
   const endOfDay = new Date(currentDate);
   endOfDay.setHours(23, 59, 59, 999);
 
-  const dateFilter =
-    status === "agendado"
-      ? { gte: startOfDay.toISOString(), lte: endOfDay.toISOString() }
-      : { lte: currentDate.toString() };
-
   const normalizedTeam1 = team1 ? normalizeSearchTerm(team1) : undefined;
   const normalizedTeam2 = team2 ? normalizeSearchTerm(team2) : undefined;
 
@@ -55,7 +50,6 @@ export async function findManyMatches({
     where: {
       campeonato: { temporada: championshipSeason },
       status,
-      dataRealizacaoIso: dateFilter,
       ...createSlugFilter(normalizedTeam1, normalizedTeam2),
     },
     select: {
