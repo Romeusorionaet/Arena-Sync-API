@@ -7,9 +7,10 @@ import { championshipSchema } from "../http/schemas/championship-schema";
 import { matchesListSchema } from "../http/schemas/matches-list-schema";
 import { upsertMatchData } from "../database/prisma/match/upsert-match";
 import cron from "node-cron";
+import { toZonedTime } from "date-fns-tz";
 
 export async function cronJobGetChampionshipMatches() {
-  const now = new Date();
+  const now = toZonedTime(new Date(), "America/Sao_Paulo");
 
   if (now.getDate() === 10 && now.getMonth() >= 3 && now.getMonth() <= 10) {
     try {
