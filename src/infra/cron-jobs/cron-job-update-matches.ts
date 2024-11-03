@@ -8,8 +8,8 @@ export async function cronJobUpdateMatches() {
   const now = new Date();
 
   if (
-    now.getHours() === 1 &&
-    now.getMinutes() === 0 &&
+    now.getHours() === 14 &&
+    now.getMinutes() === 58 &&
     now.getMonth() >= 3 &&
     now.getMonth() <= 11
   ) {
@@ -46,4 +46,4 @@ export async function cronJobUpdateMatches() {
   }
 }
 
-cron.schedule("0 1 * 4-12 *", cronJobUpdateMatches);
+cron.schedule("58 14 * 4-12 *", cronJobUpdateMatches);

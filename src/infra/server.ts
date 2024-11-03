@@ -8,11 +8,11 @@ app
     host: "0.0.0.0",
     port: env.PORT,
   })
-  .then(async () => {
+  .then(() => {
     console.log("► HTTP Server Running! Port:", env.PORT);
 
-    await Promise.all([
-      cronJobGetChampionshipMatches(),
-      cronJobUpdateMatches(),
-    ]);
+    cronJobGetChampionshipMatches();
+    cronJobUpdateMatches();
+
+    console.log("Cron-jobs em execução.");
   });
