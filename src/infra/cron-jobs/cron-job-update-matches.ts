@@ -39,7 +39,7 @@ export async function cronJobUpdateMatches() {
   }
 }
 
-cron.schedule("48 15 * 4-12 *", cronJobUpdateMatches, {
+cron.schedule("0 1 * 4-12 *", cronJobUpdateMatches, {
   timezone: "America/Sao_Paulo",
   runOnInit: false,
   recoverMissedExecutions: true,

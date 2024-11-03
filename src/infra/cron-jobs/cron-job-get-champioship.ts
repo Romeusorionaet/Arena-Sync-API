@@ -45,4 +45,8 @@ export async function cronJobGetChampionshipMatches() {
   }
 }
 
-cron.schedule("* * 10 4-11 *", cronJobGetChampionshipMatches);
+cron.schedule("* * 10 4-11 *", cronJobGetChampionshipMatches, {
+  timezone: "America/Sao_Paulo",
+  runOnInit: false,
+  recoverMissedExecutions: true,
+});
