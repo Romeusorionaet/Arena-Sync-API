@@ -13,6 +13,4 @@ app
 
     cronJobGetChampionshipMatches();
     cronJobUpdateMatches();
-
-    console.log("Cron-jobs em execução.");
   });
